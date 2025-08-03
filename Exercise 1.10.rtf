@@ -1,0 +1,115 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh9800\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 (define (A x y)\
+    (cond ((= y 0) 0)\
+	   ((= x 0) (* 2 y))\
+	   ((= y 1) 2)\
+	   (else (A (- x 1) (A x (- y 1))))))\
+\
+(A 1 10)\
+First predicate is false, 10 is not equal to 0. Second predicate is false, 1 is not equal to 0. Third predicate is false, 10 is not equal to 1. \
+(A (- 1 1) (A 1 (- 10 1)))\
+(A 0 (A 1 9))\
+Applicative order so evaluate (A 1 9), though in normal order need to check if y is 0, so this doesn\'92t really matter, regardless we need to evaluate it.\
+First predicate is false, 9 is not equal to 0. Second predicate is false, 1 is not equal to 0. Third predicate is false, 9 is not equal to 1.\
+(A 0 (A (- 1 1) (A 1 (- 9 1)))\
+(A 0 (A 0 (A 1 8)))\
+At this point it becomes obvious that this will continue until y in the final nested procedure call is decremented to 1, and for each decrement of y in that call, an additional A call wraps it, with its x value set to 0. Thus, we require 7 more decrements and 7 more A calls. The result is the following:\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 1 1))))))))))\
+Now the final y value can be evaluated, as (A 1 1) produces 2 because the third predicate is true.\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 2)))))))))\
+For all of these calls, the second predicate is true, so the value of y is multiplied by two and returned. This is first applied to the final nested call.\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 4))))))))\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 8)))))))\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 16))))))\
+(A 0 (A 0 (A 0 (A 0 (A 0 32)))))\
+(A 0 (A 0 (A 0 (A 0 64))))\
+(A 0 (A 0 (A 0 128)))\
+(A 0 (A 0 256))\
+(A 0 512)\
+1024\
+This is equal to 2^10. This makes sense because we multiplied 2 by 2 9 times.\
+\
+(A 2 4)\
+First predicate is false, 4 is not equal to 0. Second predicate is false, 2 is not equal to 0. Third predicate is false, 4 is not equal to 1.\
+(A (- 2 1) (A 2 (- 4 1)))\
+(A 1 (A 2 3))\
+To evaluate first predicate, must evaluate (A 2 3), for which the first predicate is false because 3 is not equal to 0. Second predicate is false, 2 is not equal to 0. Third predicate is false, 3 is not equal to 1.\
+(A 1 (A (- 2 1) (A 2 (- 3 1))))\
+(A 1 (A 1 (A 2 2)))\
+This pattern continues as the y value in the final A call is decremented by 1 until it equals to 1, at which point the third predicate will be true. \
+To demonstrate this, none of the first three predicates are true, so we get:\
+(A 1 (A 1 (A (- 2 1) (A 2 (- 2 1)))))\
+(A 1 (A 1 (A 1 (A 2 1))))\
+Now the third predicate of the final call is true. We look at that call first because the outer call requires the call directly nested in it to be evaluated to check the first predicate, the second-most outer requires the call directly nested in it to be evaluated, and so forth. The first predicate is false because 1 is not equal to 0. The second predicate is false because 2 is not equal to 0. The third predicate is true because 1 equals 1. Thus the final call returns 2.\
+(A 1 (A 1 (A 1 2)))\
+Now we must evaluate (A 1 2). The first predicate is false because 2 is not equal to 0. The second predicate is false because 1 is not equal to 0. The third predicate is false because 2 is not equal to 1.\
+(A 1 (A 1 (A (- 1 1) (A 1 (- 2 1)))))\
+(A 1 (A 1 (A 0 (A 1 1))))\
+Now we evaluate (A 1 1). The first predicate is false because 1 is not equal to 0. The second predicate is false because 1 is not equal to 0. The third predicate is true because 1 equals 1. This returns 2.\
+(A 1 (A 1 (A 0 2)))\
+Now we must evaluate (A 0 2). The first predicate is false because 2 is not equal to 0. The second predicate is true because 0 is equal to 0. Therefore this returns 2 * 2, which is 4.\
+(A 1 (A 1 4))\
+Now we must evaluate (A 1 4). From the previous example, we know to evaluate this pattern, we must nest an A call with x being equal to 0 for each decrement of the y value, until y equals 1. Therefore we must decrement 3 times.\
+(A 1 (A 0 (A 0 (A 0 (A 1 1)))))\
+Now we evaluate (A 1 1) and get 2 because the first two predicates are false (neither x nor y equals 0), but 1 equals 1. \
+(A 1 (A 0 (A 0 (A 0 2))))\
+Now we evaluate (A 0 2). The first predicate is false because 2 is not equal to 0. The second predicate is true because 0 equals 0, therefore this returns 2 *2, which is 4.\
+(A 1 (A 0 (A 0 4)))\
+We know from the first example this pattern continues, for each call (A 0 y), if y is not 0, then it will return 2 * y.\
+(A 1 (A 0 8))\
+(A 1 16)\
+We know from the first example we must decrement 15 times. The answer will be 2^16 because there are 15 calls that will multiply y by 2, and we start with 2. 2^16 = 65,536\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 1 1))))))))))))))))\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 2)))))))))))))))\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 4))))))))))))))\
+(A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 8)))))))))))))\
+\'85\
+(A 0 32768)\
+65536\
+\
+(A 3 3)\
+The first predicate is false, 3 is not equal to 0. The second predicate is false, 3 is not equal to 0. The third predicate is false, 3 is not equal to 1.\
+(A (- 3 1) (A 3 (- 3 1))))\
+(A 2 (A 3 2))\
+Now we must evaluate (A 3 2) to even check the first predicate. \
+The first predicate is false, 3 is not equal to 0. The second predicate is false, 2 is not equal to 0. The third predicate is false, 2 is not equal to 1.\
+(A 2 (A (- 3 1) (A 3 (- 2 1))))\
+(A 2 (A 2 (A 3 1)))\
+Now we must evaluate (A 3 1). The first predicate is false, 1 is not equal to 0. The second predicate is false, 3 is not equal to 0. The third predicate is true, 1 equals 1.\
+(A 2 (A 2 2))\
+Now we must evaluate (A 2 2). We know from the second part of this exercise, where we solved (A 2 4), that as we decrement y, we add an outer A call where x equals 1. This also follows from the else clause.\
+(A 2 (A (- 2 1) (A 2 (- 2 1))))\
+(A 2 (A 1 (A 2 1)))\
+Now we evaluate (A 2 1). The first predicate is false because 1 does not equal 0. The second predicate is false, 2 is not equal to 0. The third predicate is true, 1 equals 1. Thus, this evaluates to 2.\
+(A 2 (A 1 2))\
+We must now evaluate (A 1 2). We know from previous examples that this will evaluate to 2^2, which is 4.\
+This can also be shown as follows (all three predicates are false):\
+(A 2 (A (- 1 1) (A 1 (- 2 1))))\
+(A 2 (A 0 (A 1 1))\
+(A 2 (A 0 2))\
+(A 2 4)\
+We know from previous example that (A 2 4) is equal to 65536. Also, we now know that (A 3 3) equals (A 2 4).\
+65536\
+\
+\
+(define (f n) (A 0 n))\
+(define (g n) (A 1 n))\
+(define (h n) (A 2 n))\
+(define (k n ) (* 5 n n))\
+\
+Give concise mathematical definitions for the functions computed by the procedures f, g, and h for positive integers n. For example, (k n) computes 5n^2.\
+Note that because 0 is not a positive integer, the first predicate will always be false for these definitions.\
+(f n) computes 2n. This follows from the second predicate.\
+(g n) computes 2^n. This is because n will be decremented until it equals 1, which makes the third predicate true, and returns 2. This 2 value is then multiplied by 2 for however many times n was decremented, which adds an outer A procedure call where x is 0, thus making the second predicate true. This is equivalent to 2 * 2^n-1 which equals 2^n.\
+(h n) computes 2^^n-1. \
+This is because (A 2 n) is first expanded into the form of A calls where x is equal to 1, since we know how to evaluate that. If n is 1, then no expansion is necessary, it evaluates to 2. Otherwise, this is done n-1 times because the only way a predicate can be true in this scenario is if y equals 1. This means that the final nested call will be (A 2 1), which we can evaluate to 2. This aligns with our explanation for why no expansion is necessary when n equals 1. In all other scenarios, every remaining call will have an x equal to 1, and there are n-1 such calls. To visualize this, imagine a scenario with large n. The final nested call will always be (A 1 2), which evaluates to 2^2 = 4. Which means the next call will be (A 1 4), which evaluates to 2^4 = 16. The next call will be (A 1 16), which evaluates to 2^16. This continues until there are no remaining A calls. With each call, the y-value is 2 to the power of the previous y call, so (A 1 16) is (A 1 2^4), as the previous call was (A 1 4). (A 1 4) itself is (A 1 2^2), as its previous call was (A 1 2). (A 1 2) is the final nested call for all n greater than 1. This process is repeated n-1 times because that is how many A calls there are where x is equal to 1. The answer is thus the tetration of 2, n-1 times.\
+\
+\
+\
+}

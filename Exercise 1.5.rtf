@@ -1,0 +1,20 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2821
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 (define (p) (p))\
+(define (test x y)\
+    (if (= x 0) 0 y))\
+\
+(test 0 (p))\
+\
+With an interpreter that uses applicative-order evaluation, the operator and operands are evaluated first and then the resulting procedure is applied to the resulting arguments.\
+In this example, that means that the parameters of test are replaced by the arguments 0 and (p), which are first evaluated to be 0 and \'85 (p) is defined as (p), but needs to be evaluated again, and is evaluated as (p), and so on. This creates an infinite loop, so the combination (test 0 (p)) will not evaluate with an interpreter that uses applicative-order.\
+Pasting this into Racket, which uses applicative-order, there is indeed the expected infinite loop.\
+\
+With an interpreter that uses normal-order evaluation, the operands are not evaluated until there values are needed. So 0 and (p) are substituted into test without requiring evaluation. The question tells us that the predicate expression is evaluated first and the result determines whether to evaluate the consequent or alternative expression. Because 0 = 0, whatever argument is replacing the parameter y never gets evaluated. Thus, the entire combination will evaluate to be 0.\
+\
+ }
