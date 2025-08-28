@@ -107,8 +107,20 @@ Give concise mathematical definitions for the functions computed by the procedur
 Note that because 0 is not a positive integer, the first predicate will always be false for these definitions.\
 (f n) computes 2n. This follows from the second predicate.\
 (g n) computes 2^n. This is because n will be decremented until it equals 1, which makes the third predicate true, and returns 2. This 2 value is then multiplied by 2 for however many times n was decremented, which adds an outer A procedure call where x is 0, thus making the second predicate true. This is equivalent to 2 * 2^n-1 which equals 2^n.\
-(h n) computes 2^^n-1. \
-This is because (A 2 n) is first expanded into the form of A calls where x is equal to 1, since we know how to evaluate that. If n is 1, then no expansion is necessary, it evaluates to 2. Otherwise, this is done n-1 times because the only way a predicate can be true in this scenario is if y equals 1. This means that the final nested call will be (A 2 1), which we can evaluate to 2. This aligns with our explanation for why no expansion is necessary when n equals 1. In all other scenarios, every remaining call will have an x equal to 1, and there are n-1 such calls. To visualize this, imagine a scenario with large n. The final nested call will always be (A 1 2), which evaluates to 2^2 = 4. Which means the next call will be (A 1 4), which evaluates to 2^4 = 16. The next call will be (A 1 16), which evaluates to 2^16. This continues until there are no remaining A calls. With each call, the y-value is 2 to the power of the previous y call, so (A 1 16) is (A 1 2^4), as the previous call was (A 1 4). (A 1 4) itself is (A 1 2^2), as its previous call was (A 1 2). (A 1 2) is the final nested call for all n greater than 1. This process is repeated n-1 times because that is how many A calls there are where x is equal to 1. The answer is thus the tetration of 2, n-1 times.\
+(h n) computes 2^^n. \
+This is because (A 2 n) is first expanded into the form of A calls where x is equal to 1, since we know how to evaluate that. If n is 1, then no expansion is necessary, it evaluates to 2. Otherwise, this is done n-1 times because the only way a predicate can be true in this scenario is if y equals 1. This means that the final nested call will be (A 2 1), which we can evaluate to 2. This aligns with our explanation for why no expansion is necessary when n equals 1. In all other scenarios, every remaining call will have an x equal to 1, and there are n-1 such calls. To visualize this, imagine a scenario with large n. The final nested call will always be (A 1 2), which evaluates to 2^2 = 4. Which means the next call will be (A 1 4), which evaluates to 2^4 = 16. The next call will be (A 1 16), which evaluates to 2^16. This continues until there are no remaining A calls. With each call, the y-value is 2 to the power of the previous y call, so (A 1 16) is (A 1 2^4), as the previous call was (A 1 4). (A 1 4) itself is (A 1 2^2), as its previous call was (A 1 2). (A 1 2) is the final nested call for all n greater than 1. The resulting evaluation will yield a final call of (A 1 2^n-1) because there are n-1 A calls where x is equal to 1. (A 1 2^n-1) is (g 2^n-1) which evaluates to 2^(2^n-1). The answer is thus the tetration of 2, n times.\
+\
+For example, let n = 3\
+(A 2 3)\
+(A 1 (A 2 2))\
+(A 1 (A 1 (A 2 1))\
+(A 1 (A 1 2))\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 There are n-1 = 2 (A 1 y) calls\
+(A 1 y) evaluates to 2^y, so (A 1 2) evaluates to 2^2\
+(A 1 4) which evaluates to 2^4 or 2^2^2, which is 2 tetrated to n = 3 times.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
 \
 \
 \
