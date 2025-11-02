@@ -140,7 +140,6 @@ which for numbers this large is permissible even with limited precision).
 
 #let results4 = (10.000000000139897, 31.622782450701045, 100.00000025490743, 316.2277660203896, 1000.0001533016629, 3162.277666486375, 10000.000000082462, 31622.780588899368, 100000.00015603233, 316227.7660187454, 1000000.103461242, 3162277.6640104805, 10000000.000043957, 31622779.27999515)
 #let dict4 = (:)
-#let radicands = range(2,16).map(i => calc.pow(10, i))
 #for (i, radicand) in radicands.enumerate() {
   dict4.insert(("rad" + str(i)), radicand)
   dict4.insert(("rslt" + str(i)), results4.at(i))
