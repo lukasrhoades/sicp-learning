@@ -95,7 +95,7 @@ between guesses is less than 0.001 times the size of the guess, we can solve
 both problems. As seen in the table below, the ratio of the difference is now acceptable
 for very small numbers, and the interpreter is also able to give very accurate
 square roots for very large numbers.
-
+#linebreak() #linebreak()
 #let results3 = (0.31622776651756745, 0.10000000000139897, 0.03162278245070105, 0.010000000025490743, 0.0031622776602038957, 0.0010000001533016628)
 #let dict3 = (:)
 #for (i, radicand) in (0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001).enumerate() {
