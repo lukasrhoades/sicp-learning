@@ -1,0 +1,46 @@
+#!/usr/bin/env racket
+#lang sicp
+
+(define (timed-prime-test n)
+  (newline)
+  (display n)
+  (start-prime-test n (runtime)))
+(define (start-prime-test n start-time)
+  (if (prime? n)
+      (report-prime (- (runtime) start-time))
+      false))
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time))
+
+(define (smallest-divisor n)
+  (define (find-divisor n test-divisor)
+    (cond ((> (square test-divisor) n) n)
+          ((divides? test-divisor n) test-divisor)
+          (else (find-divisor n (+ test-divisor 1)))))
+  (define (square x) (* x x))
+  (define (divides? a b) (= (remainder b a) 0))
+  (find-divisor n 2))
+(define (prime? n)
+  (= n (smallest-divisor n)))
+
+(define (even? n)
+  (= (remainder n 2) 0))
+
+(define (search-for-primes start)
+  (define (prime-searcher curr num-primes stop)
+    (cond ((= num-primes stop) (newline) (display "End"))
+          ((timed-prime-test curr)
+           (prime-searcher (+ curr 2) (+ num-primes 1) stop))
+          (else (prime-searcher (+ curr 2) num-primes stop))))
+  (if (even? start)
+    (prime-searcher (+ start 1) 0 3)
+    (prime-searcher start 0 3)))
+
+(search-for-primes 1000)
+(search-for-primes 10000)
+(search-for-primes 100000)
+(search-for-primes 1000000)
+
+(search-for-primes 10000000)
+(search-for-primes 100000000)
