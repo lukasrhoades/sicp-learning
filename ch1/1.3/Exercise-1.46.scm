@@ -21,9 +21,8 @@
 
 (define tolerance 0.00001)
 (define (fixed-point f first-guess)
-  (let ((improve (lambda (x) (f x))))
-    ((iterative-improve
-       (lambda (x) (< (abs (- x (improve x))) tolerance))
-       improve)
-     first-guess)))
+  ((iterative-improve
+    (lambda (x) (< (abs (- x (f x))) tolerance))
+    f)
+   first-guess))
 (fixed-point cos 1.0)
