@@ -1,0 +1,68 @@
+#!/usr/bin/env racket
+#lang sicp
+
+(define (mul-interval x y)
+  (cond ((and (>= (lower-bound x) 0) (> (lower-bound y) 0))
+         (make-interval
+           (* (lower-bound x) (lower-bound y))
+           (* (upper-bound x) (upper-bound y))))
+        ((and (>= (lower-bound x) 0)
+              (< (lower-bound y) 0)
+              (>= (upper-bound y) 0))
+         (make-interval
+           (* (upper-bound x) (lower-bound y))
+           (* (upper-bound x) (upper-bound y))))
+        ((and (>= (lower-bound x) 0) (< (upper-bound y) 0))
+         (make-interval
+           (* (upper-bound x) (lower-bound y))
+           (* (lower-bound x) (upper-bound y))))
+        ((and (< (upper-bound x) 0) (< (upper-bound y) 0))
+         (make-interval
+           (* (upper-bound x) (upper-bound y))
+           (* (lower-bound x) (lower-bound y))))
+        ((and (< (upper-bound x) 0)
+              (< (lower-bound y) 0)
+              (>= (upper-bound y) 0))
+         (make-interval
+           (* (lower-bound x) (upper-bound y))
+           (* (lower-bound x) (lower-bound y))))
+        ((< (upper-bound x) 0)
+         (make-interval
+           (* (lower-bound x) (upper-bound y))
+           (* (upper-bound x) (lower-bound y))))
+        ((>= (lower-bound y) 0)
+         (make-interval
+           (* (lower-bound x) (upper-bound y))
+           (* (upper-bound x) (upper-bound y))))
+        ((< (upper-bound y) 0)
+         (make-interval
+           (* (upper-bound x) (lower-bound y))
+           (* (lower-bound x) (lower-bound y))))
+        ((and (< (lower-bound y) 0) (>= (upper-bound y) 0))
+         (let ((p1 (* (upper-bound x) (lower-bound y)))
+               (p2 (* (lower-bound x) (upper-bound y)))
+               (p3 (* (lower-bound x) (lower-bound y)))
+               (p4 (* (upper-bound x) (upper-bound y))))
+           (make-interval
+             (min p1 p2)
+             (max p3 p4))))))
+
+(define (>= a b) (not (< a b)))
+
+(define (make-interval a b) (cons a b))
+(define (lower-bound interval) (car interval))
+(define (upper-bound interval) (cdr interval))
+
+(define pp (make-interval 2 4))
+(define np (make-interval -5 0))
+(define nn (make-interval -3 -1))
+
+(mul-interval pp pp)
+(mul-interval pp np)
+(mul-interval pp nn)
+(mul-interval nn nn)
+(mul-interval nn np)
+(mul-interval nn pp)
+(mul-interval np pp)
+(mul-interval np nn)
+(mul-interval np np)
