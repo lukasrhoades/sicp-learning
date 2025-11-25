@@ -1,0 +1,20 @@
+#lang sicp
+
+(#%provide prime?)
+
+(define (prime? n)
+  (= (smallest-divisor n) n))
+(define (smallest-divisor n)
+  (define (find-divisor n test-divisor)
+    (cond ((> (square test-divisor) n) n)
+          ((divides? test-divisor) test-divisor)
+          ((= test-divisor 2)
+           (find-divisor-odds n 3))))
+  (define (find-divisor-odds n test-divisor)
+    (cond ((> (square test-divisor) n) n)
+          ((divides? test-divisor) test-divisor)
+          (else (find-divisor n (+ test-divisor 2)))))
+  (define (divides? test-divisor)
+    (= (remainder n test-divisor) 0))
+  (find-divisor n 2))
+(define (square x) (* x x))
