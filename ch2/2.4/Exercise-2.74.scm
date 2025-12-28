@@ -4,6 +4,8 @@
 ; division files will be represented as a pair with a type-tag that is 
 ; the name of the division, and then the employee records as its
 ; contents
+(define (div-file division-name records)
+  (cons division-name records))
 
 ; each division should have a get-record procedure that when given
 ; an employee name returns their record, if it exists
