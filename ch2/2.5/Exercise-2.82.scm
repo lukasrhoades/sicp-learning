@@ -33,19 +33,19 @@
                       (coerce-all target-type (cdr args)))
                 (coerce-all target-type (cdr args)))))))
 
-(define (scheme-number->complex n)
+(define (integer->complex n)
   (make-complex-from-real-imag (contents n) 0))
-(put-coercion 'scheme-number 'complex scheme-number->complex)
+(put-coercion 'integer 'complex integer->complex)
 
-(define test1 (make-scheme-number 3))
+(define test1 (make-integer 3))
 (define test2 (make-complex-from-real-imag 4 5))
 
 (define (add x y) (apply-generic 'add x y))
 (add test1 test2)
 
-(define (scheme-number->rational n)
+(define (integer->rational n)
   (make-rational n 1))
-(put-coercion 'scheme-number 'rational scheme-number->rational)
+(put-coercion 'integer 'rational integer->rational)
 
 (define test3 (make-rational 3 4))
 (add test1 test3)

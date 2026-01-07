@@ -29,7 +29,8 @@
 (define (sqrt x) (apply-generic 'sqrt x))
 (define (sqrt-scheme x) (make-real (sqrt x)))
 (define (sqrt-rat x)
-  (make-rational (sqrt (numer x)) (sqrt (denom x))))
+  (make-rational (make-real (sqrt (numer x)))
+                 (make-real (sqrt (denom x)))))
 
 ; generic cosine
 (define (cosine x) (apply-generic 'cosine x))

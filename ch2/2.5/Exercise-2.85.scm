@@ -31,7 +31,7 @@
               (if (equ? (raise projected) type-object)
                   (drop projected)
                   type-object))
-            type-object)))
+            type-object))))
 
 (define (apply-generic op type-tower . args)
   (let ((type-tags (map type-tag args)))

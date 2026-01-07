@@ -14,7 +14,7 @@
               (iter curr (cdr items))))))
   (iter '() type-tower))
 
-(define (apply-generic op . args type-tower)
+(define (apply-generic op type-tower . args)
   (let ((type-tags (map type-tag args)))
     (let ((proc (get op type-tags)))
       (if proc
