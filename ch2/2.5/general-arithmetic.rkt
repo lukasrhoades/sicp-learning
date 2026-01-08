@@ -163,7 +163,9 @@
     (lambda (x y)
       (and (eq? (numer x) (numer y))
        ; cannot divide by 0
-       (lambda (x) (= (numer x) 0)))))
+       (lambda (x) (=zero? (numer x))))))
+  (put '=zero? '(rational)
+       (lambda (x) (=zero? (numer x))))
   (put 'make 'rational
        (lambda (n d) (tag (make-rat n d))))
   'done)
@@ -191,7 +193,7 @@
   (put 'sine '(real)
        (lambda (x) (tag (sin x))))
   (put 'arctan '(real real)
-       (lambda (x) (tag (atan x))))
+       (lambda (x y) (tag (atan x y))))
   (put 'raise '(real) raise)
   (put 'project '(real) project)
   (put 'negate '(real)
@@ -207,6 +209,7 @@
              x
              (tag x))))
   'done)
+
 (define (make-real num)
   ((get 'make 'real) num))
 
@@ -256,7 +259,7 @@
          (and (equ? (real-part x) (real-part y))
               (equ? (imag-part x) (imag-part y)))))
   (put '=zero? '(complex)
-       (lambda (x) (= (magnitude x) 0)))
+       (lambda (x) (=zero? (magnitude x))))
   (put 'make-from-real-imag 'complex
        (lambda (x y) (tag (make-from-real-imag x y))))
   (put 'make-from-mag-ang 'complex
