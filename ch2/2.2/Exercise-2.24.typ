@@ -11,8 +11,8 @@
   let radius = 0.2
 
   let node(row, column, value, is-value, is-nil) = {
-    let x = row * 3
-    let y = column * -3
+    let x = column * 3
+    let y = row * -3
 
     let left = x
     let right = x + w
@@ -57,8 +57,8 @@
   }
 
   let label(row, column, name, value) = {
-    let x = row * 3
-    let y = column * -3
+    let x = column * 3
+    let y = row * -3
 
     line(name: name, (x - 1, y), (x, y), mark: (end: ">", size: 0.2), fill: black)
     content(name + ".0", anchor: "east", padding: 3pt, [#value])
@@ -66,15 +66,15 @@
 
   label(0, 0, "list1", `(1 (2 (3 4)))`)
   node(0, 0, 1, true, false)
-  node(1, 0, 0, false, true)
+  node(0, 1, 0, false, true)
 
   label(1, 1, "list2", `(2 (3 4))`)
   node(1, 1, 2, true, false)
-  node(2, 1, 0, false, true)
+  node(1, 2, 0, false, true)
 
   label(2, 2, "list3", `(3 4)`)
   node(2, 2, 3, true, false)
-  node(3, 2, 4, true, true)
+  node(2, 3, 4, true, true)
 })
 
 #cetz.canvas({
